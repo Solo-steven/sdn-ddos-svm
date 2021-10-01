@@ -1,0 +1,21 @@
+# non-office mininet docker image
+FROM iwaseyusuke/mininet
+# copy script
+COPY ./topo /topo
+# install package
+RUN apt update
+RUN DEBIAN_FRONTEND="noninteractive" apt install -y \
+    # ddos attack tool
+    hping3 \  
+    # DNS parser tool 
+    dnsutils \
+    # python for mininet script
+    python3  \
+    python3-pip \
+    # nodejs and npm for simple web server
+    nodejs \
+    npm  
+# install mininet python API 
+RUN pip3 install mininet
+# install express test server
+RUN cd /topo/simple-server $$ npm install
