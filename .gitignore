@@ -1,3 +1,4 @@
 __pycache__
-topo/simple-server/node_modules
+mininet/simple-server/node_modules
+controller/__pycache__
 .DS_Store

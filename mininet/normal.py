@@ -39,7 +39,8 @@ if __name__ == "__main__":
     h4 = net.get("h4")
 
     h1.cmd("cd ./Simple-Server && npm start & ")
-    for count in range(1, 300):
+    print("======== Start a normal Http Traffic 60 sec ========")
+    for count in range(30):
         h2.cmd("curl --local-port 80 10.0.0.1:3000 &")
         h3.cmd("curl --local-port 80 10.0.0.1:3000 &")
         h4.cmd("curl --local-port 80 10.0.0.1:3000 &")
