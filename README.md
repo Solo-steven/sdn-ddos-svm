@@ -8,6 +8,18 @@
 
 ---
 
+## Quick Start
+- Please open two terminal under root.
+```
+make controller-detect
+```
+```
+make mininet-start
+<docker container> python3 /mininet/attack.py $(dig host.docker.internal +short) 
+```
+
+---
+
 ## Start mininet
 - start ryu before start mininet
 ```

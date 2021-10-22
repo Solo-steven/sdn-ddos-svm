@@ -22,6 +22,7 @@ class Controller(app_manager.RyuApp):
         self.datapath_table = {}
         self.thread = hub.spawn(self._moniter)
         self.time_interval = 2
+        self.state = 0;
         # ML moniter
         self.clf = TrainedSVM()
 
@@ -30,6 +31,8 @@ class Controller(app_manager.RyuApp):
     """ ================================= """
     def _moniter(self):
         while True:
+            if self.state == 1:
+                return
             for datapath in self.datapath_table.values():
                 parser = datapath.ofproto_parser
                 flow_req = parser.OFPFlowStatsRequest(datapath)
@@ -47,10 +50,13 @@ class Controller(app_manager.RyuApp):
                 del self.datapath_table[ev.datapath.id]
     @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
     def _handle_flow_stats_reply(self, ev):
+        if self.state == 1:
+            return 
         flows = sorted([flow for flow in ev.msg.body if flow.priority == 1], key=lambda flow:(flow.match["in_port"]))
         if len(flows) != 0 :
             y = self.clf.predict(self._flow_stats_static(flows))
-            if y[0] == 1:
+            if y[0] == 1 and self.state == 0:
+                self.state = 1
                 print("DDOS is happend.")
     
     """ ================================= """
